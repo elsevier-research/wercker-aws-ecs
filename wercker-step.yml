@@ -1,0 +1,31 @@
+name: aws-ecs
+version: 0.1.0
+description: Deploy service to ECS
+keywords:
+  - aws
+  - ecs
+properties:
+  # Step 1: Configuring AWS
+  key:
+    type: string
+    required: true
+  secret:
+    type: string
+    required: true
+  region:
+    type: string
+    required: false
+
+  # Step 2: Defining task definition
+  cluster-name:
+    type: string
+    required: true
+  service-name:
+    type: string
+    required: true
+  task-definition-name:
+    type: string
+    required: true
+  task-definition-file:
+    type: string
+    required: true
