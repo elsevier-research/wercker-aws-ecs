@@ -105,6 +105,23 @@ if ! type_exists 'aws'; then
   success "Installing AWS CLI (`aws --version`) succeeded"
 fi
 
+# ----- Install jq -----
+# see documentation http://docs.aws.amazon.com/cli/latest/userguide/installing.html
+# ---------------------------
+
+# Check jq is installed
+if ! type_exists 'jq'; then
+  h1 "Installing jq"
+  INSTALL_JQ="sudo apt-get install -y jq"
+  info "$INSTALL_JQ"
+  INSTALL_JQ_OUTPUT=$($INSTALL_JQ 2>&1)
+  if [ $? -ne 0 ]; then
+    warn "$INSTALL_JQ_OUTPUT"
+    exit 1
+  fi
+  success "Installing jq (`jq --version`) succeeded"
+fi
+
 # ----- Configure -----
 # see documentation
 #    http://docs.aws.amazon.com/cli/latest/reference/configure/index.html
