@@ -105,6 +105,23 @@ if ! type_exists 'aws'; then
   success "Installing AWS CLI (`aws --version`) succeeded"
 fi
 
+# ----- Install jq -----
+# see documentation http://docs.aws.amazon.com/cli/latest/userguide/installing.html
+# ---------------------------
+
+# Check jq is installed
+if ! type_exists 'jq'; then
+  h1 "Installing jq"
+  INSTALL_JQ="sudo apt-get install -y jq"
+  info "$INSTALL_JQ"
+  INSTALL_JQ_OUTPUT=$($INSTALL_JQ 2>&1)
+  if [ $? -ne 0 ]; then
+    warn "$INSTALL_JQ_OUTPUT"
+    exit 1
+  fi
+  success "Installing jq (`jq --version`) succeeded"
+fi
+
 # ----- Configure -----
 # see documentation
 #    http://docs.aws.amazon.com/cli/latest/reference/configure/index.html
@@ -121,7 +138,7 @@ h2 "Configuring AWS Secret Access Key"
 CONFIGURE_SECRET_OUTPUT=$(aws configure set aws_secret_access_key $WERCKER_AWS_ECS_SECRET 2>&1)
 success "Configuring AWS Secret Access Key succeeded"
 
-if [ -n "$WERCKER_AWS_CODE_DEPLOY_REGION" ]; then
+if [ -n "$WERCKER_AWS_ECS_REGION" ]; then
   h2 "Configuring AWS default region"
   CONFIGURE_REGION_OUTPUT=$(aws configure set default.region $WERCKER_AWS_ECS_REGION 2>&1)
   success "Configuring AWS default region succeeded"
@@ -148,6 +165,7 @@ CLUSTER_EXISTS_GREP_OUTPUT=$($CLUSTER_EXISTS_GREP 2>&1)
 if [ $? -eq 0 ]; then
   error "Cluster '$WERCKER_AWS_ECS_CLUSTER_NAME' missing"
   exit 1
+fi
 
 h1 "Step 3: Check ECS Service"
 h2 "Checking ECS service '$WERCKER_AWS_ECS_SERVICE_NAME' exists"
@@ -163,6 +181,7 @@ SERVICE_EXISTS_GREP_OUTPUT=$($SERVICE_EXISTS_GREP 2>&1)
 if [ $? -eq 0 ]; then
   info "Service '$WERCKER_AWS_ECS_SERVICE_NAME' missing"
   exit 1
+fi
 
 h1 "Step 4: Create New Task Definition Revision"
 h2 "Creating ECS task definition revision"
