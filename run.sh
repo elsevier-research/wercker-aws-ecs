@@ -138,7 +138,7 @@ h2 "Configuring AWS Secret Access Key"
 CONFIGURE_SECRET_OUTPUT=$(aws configure set aws_secret_access_key $WERCKER_AWS_ECS_SECRET 2>&1)
 success "Configuring AWS Secret Access Key succeeded"
 
-if [ -n "$WERCKER_AWS_CODE_DEPLOY_REGION" ]; then
+if [ -n "$WERCKER_AWS_ECS_REGION" ]; then
   h2 "Configuring AWS default region"
   CONFIGURE_REGION_OUTPUT=$(aws configure set default.region $WERCKER_AWS_ECS_REGION 2>&1)
   success "Configuring AWS default region succeeded"
