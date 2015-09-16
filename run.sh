@@ -165,6 +165,7 @@ CLUSTER_EXISTS_GREP_OUTPUT=$($CLUSTER_EXISTS_GREP 2>&1)
 if [ $? -eq 0 ]; then
   error "Cluster '$WERCKER_AWS_ECS_CLUSTER_NAME' missing"
   exit 1
+fi
 
 h1 "Step 3: Check ECS Service"
 h2 "Checking ECS service '$WERCKER_AWS_ECS_SERVICE_NAME' exists"
@@ -180,6 +181,7 @@ SERVICE_EXISTS_GREP_OUTPUT=$($SERVICE_EXISTS_GREP 2>&1)
 if [ $? -eq 0 ]; then
   info "Service '$WERCKER_AWS_ECS_SERVICE_NAME' missing"
   exit 1
+fi
 
 h1 "Step 4: Create New Task Definition Revision"
 h2 "Creating ECS task definition revision"
