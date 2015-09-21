@@ -5,8 +5,7 @@ This wercker step allows to deploy Docker containers with [AWS ECS](http://docs.
 
 Please read the [AWS ECS](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html) documentation and [API](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/Welcome.html) before using this step.
 
-
-The step install the [AWS Cli](http://docs.aws.amazon.com/cli/latest/userguide/installing.html) through pip, if the CLI is not already installed. 
+The step is written in Python 2.7 and use Pip and Boto3 module.
 
 
 ## AWS ECS workflow
@@ -31,15 +30,13 @@ The following configuration allows to setup this step :
 
 * `cluster-name` (required): The name of the cluster to deploy the service
 
-
 #### Step 3 : [Checking ECS Service](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DescribeServices.html)
 
-This step check a previously created ECS service exists.
+This step check a previously created ECS service exists. The service MUST be created before using this step.
 
 The following configuration allows to setup this step :
 
 * `service-name` (required): The name of the service to deploy
-
 
 #### Step 4 : [Create New Task Definition ](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_RegisterTaskDefinition.html)
 
@@ -50,10 +47,9 @@ The following configuration allows to setup this step :
 * `task-definition-name` (required): The name of the task definition
 * `task-definition-file` (required): The file containing the task definition
 
+#### Step 5 : [Downscale ECS Service](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_UpdateService.html)
 
-#### Step 5 : [Scale Down ECS Service](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_UpdateService.html)
-
-This step scale down the service in order to deploy the new revision.
+This step downscale the service in order to deploy the new revision.
 
 See this [thread](https://forums.aws.amazon.com/thread.jspa?threadID=179271) for explanation :
  
@@ -64,15 +60,18 @@ For example, if you have 5 container instances and 5 tasks running bound to host
 The scheduler will recognize that it can stop 1 container and still meet your needs. After stopping 1, the free space will be used to start another. 
 You can think of desired count as also the minimum count for now and the scheduler won't remove tasks below that minimum which is likely why you see resources not found.
 
-
 #### Step 6 : [Update ECS Service](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_UpdateService.html)
 
 This step update the service with the new revision.
- 
+
+#### Step 7 : [Upscale ECS Service](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_UpdateService.html)
+
+This step upscale the service to the initial number of tasks.
+
  
 ## Example
 
-The following example deploy an `hello` service to ECS :
+The following example deploy an `hello` service on ECS :
 
 ```
 deploy:
