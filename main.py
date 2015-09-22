@@ -11,7 +11,7 @@ logging.getLogger("botocore").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 h1 = lambda x: logger.info("\033[1m\033[4m\033[94m%s\033[0m\n" % x)
 success = lambda x: logger.info("\033[92m✔ %s\033[0m\n" % x)
-error = lambda x: logger.info("\033[91m ✖ %s\033[0m\n" % x)
+error = lambda x: logger.info("\033[91m✖ %s\033[0m\n" % x)
 
 # Arguments parsing
 parser = argparse.ArgumentParser(description='Deploy Service on ECS')
