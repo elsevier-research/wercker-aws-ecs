@@ -60,6 +60,11 @@ For example, if you have 5 container instances and 5 tasks running bound to host
 The scheduler will recognize that it can stop 1 container and still meet your needs. After stopping 1, the free space will be used to start another. 
 You can think of desired count as also the minimum count for now and the scheduler won't remove tasks below that minimum which is likely why you see resources not found.
 
+This step is run only if the number of tasks running is greater than the following configuration :
+  
+  * `minimum-running-tasks` (optional default 2): The minimum number of running tasks expected
+
+
 #### Step 6 : [Update ECS Service](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_UpdateService.html)
 
 This step update the service with the new revision.

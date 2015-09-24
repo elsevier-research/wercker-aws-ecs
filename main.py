@@ -22,6 +22,7 @@ parser.add_argument('--cluster-name', dest='cluster_name', required=True)
 parser.add_argument('--service-name', dest='service_name', required=True)
 parser.add_argument('--task-definition-name', dest='task_definition_name', required=True)
 parser.add_argument('--task-definition-file', dest='task_definition_file', required=True)
+parser.add_argument('--minimum-running-tasks', dest='minimum_running_tasks', default=2)
 args = parser.parse_args()
 
 try:
@@ -39,7 +40,7 @@ try:
     h1("Step 3: Check ECS Service")
     response = ecs.describe_service(cluster=args.cluster_name, service=args.service_name)
     original_running_count = (response.get('services')[0]).get('runningCount')
-    success("Checking service '%s' succeeded" % args.service_name)
+    success("Checking service '%s' succeeded (%d tasks running)" % (args.service_name, original_running_count))
 
     # Step 4: Register New Task Definition
     h1("Step 4: Register New Task Definition")
@@ -47,12 +48,18 @@ try:
     task_definition_arn = response.get('taskDefinition').get('taskDefinitionArn')
     success("Registering task definition '%s' succeeded" % task_definition_arn)
 
-    # Step 5: Downscale ECS Service
-    h1("Step 5: Downscale ECS Service")
-    response = ecs.downscale_service(cluster=args.cluster_name, service=args.service_name)
-    downscale_running_count = (response.get('services')[0]).get('runningCount')
-    success("Downscaling service '%s' (from %d to %d tasks) succeeded"
-          % (args.service_name, original_running_count, downscale_running_count))
+    # Step 5: Downscale ECS Service if necessary
+    if original_running_count > args.minimum_running_tasks:
+        h1("Step 5: Downscale ECS Service")
+        response = ecs.downscale_service(cluster=args.cluster_name, service=args.service_name)
+        downscale_running_count = (response.get('services')[0]).get('runningCount')
+        success("Downscaling service '%s' (from %d to %d tasks) succeeded"
+                % (args.service_name, original_running_count, downscale_running_count))
+        delta = 1
+    else:
+        h1("Step 5: Downscale ECS Service")
+        success("Downscaling service is not necessary (not enough tasks are running)")
+        delta = args.minimum_running_tasks - original_running_count
 
     # Step 6: Update ECS Service
     h1("Step 6: Update ECS Service")
@@ -62,10 +69,10 @@ try:
 
     # Step 7: Upscale ECS Service
     h1("Step 7: Upscale ECS Service")
-    response = ecs.upscale_service(cluster=args.cluster_name, service=args.service_name)
+    response = ecs.upscale_service(cluster=args.cluster_name, service=args.service_name, delta=delta)
     upscale_running_count = (response.get('services')[0]).get('runningCount')
     success("Upscaling service '%s' (from %d to %d tasks) succeeded"
-          % (args.service_name, running_count, upscale_running_count))
+            % (args.service_name, running_count, upscale_running_count))
 
 except Exception as e:
     error(e)
