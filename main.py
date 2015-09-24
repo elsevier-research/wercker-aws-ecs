@@ -49,7 +49,7 @@ try:
     success("Registering task definition '%s' succeeded" % task_definition_arn)
 
     # Step 5: Downscale ECS Service if necessary
-    if original_running_count > args.minimum_running_tasks:
+    if original_running_count >= args.minimum_running_tasks:
         h1("Step 5: Downscale ECS Service")
         response = ecs.downscale_service(cluster=args.cluster_name, service=args.service_name)
         downscale_running_count = (response.get('services')[0]).get('runningCount')
