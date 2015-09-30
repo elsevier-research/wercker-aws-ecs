@@ -22,7 +22,7 @@ parser.add_argument('--cluster-name', dest='cluster_name', required=True)
 parser.add_argument('--service-name', dest='service_name', required=True)
 parser.add_argument('--task-definition-name', dest='task_definition_name', required=True)
 parser.add_argument('--task-definition-file', dest='task_definition_file', required=True)
-parser.add_argument('--minimum-running-tasks', dest='minimum_running_tasks', default=2)
+parser.add_argument('--minimum-running-tasks', type=int, dest='minimum_running_tasks', required=True)
 args = parser.parse_args()
 
 try:
