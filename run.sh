@@ -107,4 +107,4 @@ python "$WERCKER_STEP_ROOT/main.py" \
   --service-name "$WERCKER_AWS_ECS_SERVICE_NAME" \
   --task-definition-name "$WERCKER_AWS_ECS_TASK_DEFINITION_NAME" \
   --task-definition-file "$WERCKER_AWS_ECS_TASK_DEFINITION_FILE" \
-  --minimum-running-tasks "${WERCKER_AWS_ECS_MINIMUM_RUNNING_TASKS:-2}"
+  --minimum-running-tasks "${WERCKER_AWS_ECS_MINIMUM_RUNNING_TASKS:-1}"
