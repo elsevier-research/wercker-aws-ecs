@@ -99,7 +99,6 @@ if [ -z "$WERCKER_AWS_ECS_TASK_DEFINITION_FILE" ]; then
   exit 1
 fi
 
-
 python "$WERCKER_STEP_ROOT/main.py" \
   --key "$WERCKER_AWS_ECS_KEY" \
   --secret "$WERCKER_AWS_ECS_SECRET" \
@@ -107,4 +106,5 @@ python "$WERCKER_STEP_ROOT/main.py" \
   --cluster-name "$WERCKER_AWS_ECS_CLUSTER_NAME" \
   --service-name "$WERCKER_AWS_ECS_SERVICE_NAME" \
   --task-definition-name "$WERCKER_AWS_ECS_TASK_DEFINITION_NAME" \
-  --task-definition-file "$WERCKER_AWS_ECS_TASK_DEFINITION_FILE"
+  --task-definition-file "$WERCKER_AWS_ECS_TASK_DEFINITION_FILE" \
+  --minimum-running-tasks "${WERCKER_AWS_ECS_MINIMUM_RUNNING_TASKS:-1}"
