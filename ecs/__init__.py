@@ -37,10 +37,9 @@ class ECSService(object):
             raise Exception("Service '%s' is %s in cluster '%s'" % (service, failures[0].get('reason'), cluster))
         return response
 
-    def register_task_definition(self, family, file):
+    def register_task_definition(self, file):
         """
         Register the task definition contained in the file
-        :param family: the task definition name
         :param file: the task definition content file
         :return: the response or raise an Exception
         """
@@ -48,9 +47,11 @@ class ECSService(object):
             raise IOError('The task definition file does not exist')
 
         with open(file, 'r') as content_file:
-            container_definitions = json.loads(content_file.read())
+            task_file = json.loads(content_file.read())
 
-        response = self.client.register_task_definition(family=family, containerDefinitions=container_definitions)
+        response = self.client.register_task_definition(family=task_file.get('family'),
+                                                        containerDefinitions=task_file.get('containerDefinitions'),
+                                                        volumes=task_file.get('volumes'))
         task_definition = response.get('taskDefinition')
         if task_definition.get('status') is 'INACTIVE':
             arn = task_definition.get('taskDefinitionArn')
