@@ -23,9 +23,6 @@ properties:
   service-name:
     type: string
     required: true
-  task-definition-name:
-    type: string
-    required: true
   task-definition-file:
     type: string
     required: true

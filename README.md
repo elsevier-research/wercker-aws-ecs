@@ -44,7 +44,6 @@ This step register a new task definition for the service.
 
 The following configuration allows to setup this step :
 
-* `task-definition-name` (required): The name of the task definition
 * `task-definition-file` (required): The file containing the task definition
 
 #### Step 5 : [Downscale ECS Service](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_UpdateService.html)
@@ -86,6 +85,5 @@ deploy:
       secret: aws_access_secret_id
       cluster-name: staging
       service-name: hello
-      task-definition-name: hello
       task-definition-file: /app/hello-task-definition.json
 ```
