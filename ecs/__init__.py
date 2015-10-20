@@ -114,7 +114,7 @@ class ECSService(object):
         :param family: the task definition name
         :return: the response or raise an Exception
         """
-        response = self.client.run_task(cluster=cluster, taskDefinition=[family])
+        response = self.client.run_task(cluster=cluster, taskDefinition=family)
 
         failures = response.get('failures')
         if failures:
