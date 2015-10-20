@@ -84,10 +84,10 @@ if [ -z "$WERCKER_AWS_ECS_CLUSTER_NAME" ]; then
   exit 1
 fi
 
-if [ -z "$WERCKER_AWS_ECS_SERVICE_NAME" ]; then
-  error "Please set the 'service-name' variable"
-  exit 1
-fi
+#if [ -z "$WERCKER_AWS_ECS_SERVICE_NAME" ]; then
+#  error "Please set the 'service-name' variable"
+#  exit 1
+#fi
 
 if [ -z "$WERCKER_AWS_ECS_TASK_DEFINITION_NAME" ]; then
   error "Please set the 'task-definition-name' variable"
@@ -104,7 +104,7 @@ python "$WERCKER_STEP_ROOT/main.py" \
   --secret "$WERCKER_AWS_ECS_SECRET" \
   --region "${WERCKER_AWS_ECS_REGION:-us-east-1}" \
   --cluster-name "$WERCKER_AWS_ECS_CLUSTER_NAME" \
-  --service-name "$WERCKER_AWS_ECS_SERVICE_NAME" \
   --task-definition-name "$WERCKER_AWS_ECS_TASK_DEFINITION_NAME" \
   --task-definition-file "$WERCKER_AWS_ECS_TASK_DEFINITION_FILE" \
+  --service-name "$WERCKER_AWS_ECS_SERVICE_NAME" \
   --minimum-running-tasks "${WERCKER_AWS_ECS_MINIMUM_RUNNING_TASKS:-1}"
