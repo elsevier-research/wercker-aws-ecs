@@ -106,3 +106,34 @@ class ECSService(object):
         waiter = self.client.get_waiter('services_stable')
         waiter.wait(cluster=cluster, services=[service])
         return self.describe_service(cluster=cluster, service=service)
+
+    def run_task(self, cluster, family):
+        """
+        Update the service with the task definition
+        :param cluster: the cluster name
+        :param family: the task definition name
+        :return: the response or raise an Exception
+        """
+        response = self.client.run_task(cluster=cluster, taskDefinition=[family])
+
+        failures = response.get('failures')
+        if failures:
+            raise Exception('Task %s failed: %s' % (failures[0].get('arn'), failures[0].get('reason')))
+
+        taskArn = (response.get('tasks')[0]).get('taskArn')
+        waiter = self.client.get_waiter('tasks_stopped')
+        waiter.wait(cluster=cluster, tasks=[taskArn])
+
+        response = self.client.describe_tasks(cluster=cluster, tasks=[taskArn])
+
+        failures = response.get('failures')
+        if failures:
+            raise Exception('Can\'t retreive task %s description: %s' % (failures[0].get('arn'), failures[0].get('reason')))
+
+        task = response.get('tasks')[0]
+        container = task.get('containers')[0]
+        exitCode = container.get('exitCode')
+        if exitCode != 0:
+            raise Exception('Task %s return exit code %d: %s' % (task.get('arn'), exitCode, container.get('reason')))
+
+        return response
