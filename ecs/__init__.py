@@ -109,7 +109,7 @@ class ECSService(object):
 
     def run_task(self, cluster, family):
         """
-        Update the service with the task definition
+        run the task
         :param cluster: the cluster name
         :param family: the task definition name
         :return: the response or raise an Exception
