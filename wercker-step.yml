@@ -1,5 +1,5 @@
 name: aws-ecs
-version: 0.2.6
+version: 0.2.8
 description: Deploy service to ECS
 keywords:
   - aws
@@ -20,13 +20,15 @@ properties:
   cluster-name:
     type: string
     required: true
-  service-name:
-    type: string
-    required: true
   task-definition-name:
     type: string
     required: true
   task-definition-file:
+    type: string
+    required: true
+
+  # Step 3: Defining service (optional)
+  service-name:
     type: string
     required: true
   minimum-running-tasks:
