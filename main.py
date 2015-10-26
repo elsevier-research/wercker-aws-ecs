@@ -27,7 +27,7 @@ args = parser.parse_args()
 
 try:
 
-    serviceMode = args.service_name is None
+    serviceMode = args.service_name is not None
 
     # Step: Configuring AWS
     h1("Step: Configuring AWS")
