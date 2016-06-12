@@ -128,7 +128,7 @@ class ECSService(object):
 
         failures = response.get('failures')
         if failures:
-            raise Exception('Can\'t retreive task %s description: %s' % (failures[0].get('arn'), failures[0].get('reason')))
+            raise Exception('Can\'t retrieve task %s description: %s' % (failures[0].get('arn'), failures[0].get('reason')))
 
         task = response.get('tasks')[0]
         container = task.get('containers')[0]
