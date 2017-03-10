@@ -37,7 +37,7 @@ class ECSService(object):
             raise Exception("Service '%s' is %s in cluster '%s'" % (service, failures[0].get('reason'), cluster))
         return response
 
-    def register_task_definition(self, family, file):
+    def register_task_definition(self, family, role_arn, file):
         """
         Register the task definition contained in the file
         :param family: the task definition name
@@ -50,7 +50,7 @@ class ECSService(object):
         with open(file, 'r') as content_file:
             container_definitions = json.loads(content_file.read())
 
-        response = self.client.register_task_definition(family=family, containerDefinitions=container_definitions)
+        response = self.client.register_task_definition(family=family, taskRoleArn=role_arn, containerDefinitions=container_definitions)
         task_definition = response.get('taskDefinition')
         if task_definition.get('status') is 'INACTIVE':
             arn = task_definition.get('taskDefinitionArn')
