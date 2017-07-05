@@ -57,7 +57,7 @@ class ECSService(object):
         with open(volumes, 'r') as content_volumes:
             container_definitions_volumes = json.loads(content_volumes.read())
 
-        response = self.client.register_task_definition(family=family, containerDefinitions=container_definitions, containerDefinitionsVolumes=container_definitions_volumes)
+        response = self.client.register_task_definition(family=family, containerDefinitions=container_definitions, volumes=container_definitions_volumes)
         task_definition = response.get('taskDefinition')
         if task_definition.get('status') is 'INACTIVE':
             arn = task_definition.get('taskDefinitionArn')
