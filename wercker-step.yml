@@ -26,6 +26,9 @@ properties:
   task-definition-file:
     type: string
     required: true
+  task-definition-volumes-file:
+    type: string
+    required: true
 
   # Step 3: Defining service (optional)
   service-name:

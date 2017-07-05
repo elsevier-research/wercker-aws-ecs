@@ -70,6 +70,11 @@ if [ -z "$WERCKER_AWS_ECS_TASK_DEFINITION_FILE" ]; then
   exit 1
 fi
 
+if [ -z "$WERCKER_AWS_ECS_TASK_DEFINITION_VOLUMES_FILE" ]; then
+  error "Please set the 'task-definition-volumes-file' variable"
+  exit 1
+fi
+
 
 if [ -z "$WERCKER_AWS_ECS_SERVICE_NAME" ]; then
   python "$WERCKER_STEP_ROOT/main.py" \
@@ -78,7 +83,8 @@ if [ -z "$WERCKER_AWS_ECS_SERVICE_NAME" ]; then
     --region "${WERCKER_AWS_ECS_REGION:-us-east-1}" \
     --cluster-name "$WERCKER_AWS_ECS_CLUSTER_NAME" \
     --task-definition-name "$WERCKER_AWS_ECS_TASK_DEFINITION_NAME" \
-    --task-definition-file "$WERCKER_AWS_ECS_TASK_DEFINITION_FILE"
+    --task-definition-file "$WERCKER_AWS_ECS_TASK_DEFINITION_FILE" \
+    --task-definition-volumes-file "$WERCKER_AWS_ECS_TASK_DEFINITION_VOLUMES_FILE"
 else
   python "$WERCKER_STEP_ROOT/main.py" \
     --key "$WERCKER_AWS_ECS_KEY" \
@@ -87,9 +93,7 @@ else
     --cluster-name "$WERCKER_AWS_ECS_CLUSTER_NAME" \
     --task-definition-name "$WERCKER_AWS_ECS_TASK_DEFINITION_NAME" \
     --task-definition-file "$WERCKER_AWS_ECS_TASK_DEFINITION_FILE" \
+    --task-definition-volumes-file "$WERCKER_AWS_ECS_TASK_DEFINITION_VOLUMES_FILE" \
     --service-name "$WERCKER_AWS_ECS_SERVICE_NAME" \
     --minimum-running-tasks "${WERCKER_AWS_ECS_MINIMUM_RUNNING_TASKS:-1}"
 fi
-
-
-
