@@ -1,5 +1,5 @@
 name: aws-ecs
-version: 0.2.10
+version: 0.2.11
 description: Deploy service to ECS
 keywords:
   - aws
@@ -28,7 +28,7 @@ properties:
     required: true
   task-definition-volumes-file:
     type: string
-    required: true
+    required: false
 
   # Step 3: Defining service (optional)
   service-name:
