@@ -51,13 +51,14 @@ class ECSService(object):
         with open(file, 'r') as content_file:
             container_definitions = json.loads(content_file.read())
 
+
         if os.path.isfile(volumes) is False:
-            raise IOError('The task definition file does not exist')
+            response = self.client.register_task_definition(family=family, containerDefinitions=container_definitions)
+        else:
+            with open(volumes, 'r') as content_volumes:
+                container_definitions_volumes = json.loads(content_volumes.read())
+            response = self.client.register_task_definition(family=family, containerDefinitions=container_definitions, volumes=container_definitions_volumes)
 
-        with open(volumes, 'r') as content_volumes:
-            container_definitions_volumes = json.loads(content_volumes.read())
-
-        response = self.client.register_task_definition(family=family, containerDefinitions=container_definitions, volumes=container_definitions_volumes)
         task_definition = response.get('taskDefinition')
         if task_definition.get('status') is 'INACTIVE':
             arn = task_definition.get('taskDefinitionArn')
