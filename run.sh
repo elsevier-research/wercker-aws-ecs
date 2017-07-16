@@ -70,11 +70,6 @@ if [ -z "$WERCKER_AWS_ECS_TASK_DEFINITION_FILE" ]; then
   exit 1
 fi
 
-if [ -z "$WERCKER_AWS_ECS_TASK_DEFINITION_VOLUMES_FILE" ]; then
-  error "Please set the 'task-definition-volumes-file' variable"
-  exit 1
-fi
-
 
 if [ -z "$WERCKER_AWS_ECS_SERVICE_NAME" ]; then
   python "$WERCKER_STEP_ROOT/main.py" \
